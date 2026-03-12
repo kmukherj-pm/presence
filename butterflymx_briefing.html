@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ButterflyMX · Home Briefing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --navy:#0F1F2E;--navy-mid:#1A3347;--navy-light:#243D52;
+  --teal:#0E7490;--teal-light:#0EA5C9;--teal-bg:#E0F2FE;
+  --sand:#F7F3EE;--sand-mid:#EDE8E1;--sand-deep:#DDD6CC;
+  --white:#FFFFFF;
+  --gold:#C4922A;--gold-bg:#FDF6E7;
+  --green:#166534;--green-bg:#DCFCE7;
+  --coral:#C2410C;--coral-bg:#FFF1EE;
+  --text:#0F1F2E;--text-mid:#4A5568;--text-faint:#94A3B8;
+  --border:rgba(15,31,46,0.08);
+  --serif:'Playfair Display',Georgia,serif;
+  --sans:'Plus Jakarta Sans',-apple-system,sans-serif;
+}
+body{background:var(--sand);font-family:var(--sans);color:var(--text);min-height:100vh;}
+.shell{max-width:430px;margin:0 auto;padding-bottom:80px;}
+
+/* Header */
+.hd{background:var(--navy);padding:0 0 0 0;position:relative;overflow:hidden;}
+.hd-bg{position:absolute;inset:0;background:linear-gradient(135deg,#0F1F2E 0%,#1A3347 60%,#1B3D5A 100%);opacity:1;}
+.hd-content{position:relative;padding:44px 24px 28px;}
+.hd-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.hd-wordmark{display:flex;align-items:center;gap:9px;}
+.hd-icon{width:28px;height:28px;background:var(--teal-light);border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.hd-brand{font-size:13px;font-weight:600;color:rgba(255,255,255,0.9);letter-spacing:0.02em;}
+.hd-time{font-size:12px;color:rgba(255,255,255,0.4);font-weight:500;}
+.hd-greeting{font-family:var(--serif);font-size:28px;color:#fff;line-height:1.25;margin-bottom:6px;}
+.hd-greeting em{font-style:italic;color:#7DD3FC;}
+.hd-addr{font-size:13px;color:rgba(255,255,255,0.45);display:flex;align-items:center;gap:6px;}
+
+/* Status strip */
+.status-strip{background:var(--navy-mid);padding:12px 24px;display:flex;gap:20px;border-bottom:1px solid rgba(255,255,255,0.06);}
+.stat{text-align:center;flex:1;}
+.stat-val{font-size:18px;font-weight:600;color:#fff;}
+.stat-lbl{font-size:10px;color:rgba(255,255,255,0.35);letter-spacing:0.08em;text-transform:uppercase;margin-top:1px;}
+
+/* Sections */
+.sec{padding:22px 20px;border-bottom:1px solid var(--border);animation:up 0.4s ease both;}
+@keyframes up{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.sec:nth-child(1){animation-delay:0.04s}.sec:nth-child(2){animation-delay:0.09s}
+.sec:nth-child(3){animation-delay:0.14s}.sec:nth-child(4){animation-delay:0.19s}
+.sec:nth-child(5){animation-delay:0.24s}.sec:nth-child(6){animation-delay:0.29s}
+.sec:nth-child(7){animation-delay:0.34s}
+
+.lbl{font-size:10px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-faint);margin-bottom:14px;}
+
+/* AI Insight */
+.insight-card{background:var(--navy);border-radius:16px;padding:18px 20px;margin-bottom:0;}
+.insight-eyebrow{font-size:9px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:8px;}
+.insight-text{font-family:var(--serif);font-size:16px;color:rgba(255,255,255,0.9);line-height:1.65;font-style:italic;}
+.insight-actions{display:flex;gap:9px;margin-top:14px;}
+.ia-btn{border:none;border-radius:22px;padding:8px 16px;font-family:var(--sans);font-size:12px;font-weight:600;cursor:pointer;transition:opacity 0.18s;white-space:nowrap;}
+.ia-btn:hover{opacity:0.82;}
+.ia-primary{background:var(--teal-light);color:#fff;}
+.ia-secondary{background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);}
+
+/* Neighbors */
+.neighbor-list{display:flex;flex-direction:column;gap:12px;}
+.nbr-row{background:var(--white);border-radius:14px;padding:13px 15px;display:flex;align-items:center;gap:12px;border:0.5px solid var(--border);}
+.nbr-av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#fff;flex-shrink:0;position:relative;}
+.nbr-status{position:absolute;bottom:0;right:0;width:11px;height:11px;border-radius:50%;border:2px solid var(--white);}
+.s-home{background:#22C55E;}
+.s-away{background:var(--text-faint);}
+.s-maybe{background:#F59E0B;}
+.nbr-info{flex:1;}
+.nbr-name{font-size:14px;font-weight:600;color:var(--text);}
+.nbr-unit{font-size:12px;color:var(--text-faint);}
+.nbr-tag{font-size:11px;font-weight:500;padding:3px 9px;border-radius:20px;display:inline-block;margin-top:3px;}
+.t-lunch{background:#FEF9C3;color:#854D0E;}
+.t-wfh{background:var(--teal-bg);color:var(--teal);}
+.t-free{background:var(--green-bg);color:var(--green);}
+.nbr-action{flex-shrink:0;}
+.msg-btn{background:transparent;border:0.5px solid var(--border);border-radius:10px;padding:7px 13px;font-family:var(--sans);font-size:12px;font-weight:600;color:var(--text-mid);cursor:pointer;transition:background 0.15s;white-space:nowrap;}
+.msg-btn:hover{background:var(--sand-mid);}
+.msg-btn.sent{background:var(--green-bg);color:var(--green);border-color:transparent;pointer-events:none;}
+
+/* Lunch strip */
+.lunch-strip{background:var(--gold-bg);border-radius:14px;padding:15px 18px;margin-top:14px;display:flex;align-items:center;gap:14px;}
+.lunch-icon{width:36px;height:36px;background:var(--gold);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.lunch-text{flex:1;}
+.lunch-title{font-size:14px;font-weight:600;color:var(--text);}
+.lunch-sub{font-size:12px;color:var(--text-mid);margin-top:1px;}
+.lunch-cta{border:none;background:var(--gold);color:#fff;border-radius:10px;padding:9px 15px;font-family:var(--sans);font-size:12px;font-weight:600;cursor:pointer;transition:opacity 0.18s;white-space:nowrap;flex-shrink:0;}
+.lunch-cta:hover{opacity:0.85;}
+.lunch-cta.done{background:var(--green);pointer-events:none;}
+
+/* Amenities */
+.amenity-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.amenity-card{background:var(--white);border-radius:14px;padding:15px;border:0.5px solid var(--border);cursor:pointer;transition:border-color 0.18s;}
+.amenity-card:hover{border-color:var(--teal);}
+.amenity-card.booked{border-color:var(--green);background:var(--green-bg);}
+.amenity-icon{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;}
+.amenity-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px;}
+.amenity-avail{font-size:11px;color:var(--text-faint);}
+.amenity-avail.open{color:var(--green);}
+.amenity-avail.busy{color:var(--coral);}
+.amenity-book{margin-top:10px;width:100%;border:none;border-radius:9px;padding:7px;font-family:var(--sans);font-size:12px;font-weight:600;cursor:pointer;transition:all 0.18s;}
+.ab-open{background:var(--teal-bg);color:var(--teal);}
+.ab-busy{background:var(--sand-mid);color:var(--text-faint);pointer-events:none;}
+.ab-booked{background:var(--green-bg);color:var(--green);pointer-events:none;}
+
+/* Events */
+.event-list{display:flex;flex-direction:column;gap:10px;}
+.event-row{background:var(--white);border-radius:14px;padding:13px 15px;border:0.5px solid var(--border);display:flex;gap:13px;align-items:flex-start;}
+.event-date{text-align:center;flex-shrink:0;width:38px;}
+.event-day{font-size:18px;font-weight:700;color:var(--teal);line-height:1;}
+.event-mon{font-size:9px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-faint);}
+.event-info{flex:1;}
+.event-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px;}
+.event-meta{font-size:12px;color:var(--text-faint);}
+.event-rsvp{border:none;border-radius:9px;padding:7px 13px;font-family:var(--sans);font-size:12px;font-weight:600;cursor:pointer;background:var(--teal-bg);color:var(--teal);transition:all 0.18s;flex-shrink:0;align-self:center;}
+.event-rsvp:hover{opacity:0.82;}
+.event-rsvp.done{background:var(--green-bg);color:var(--green);pointer-events:none;}
+
+/* Access */
+.access-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.access-btn{border:none;border-radius:14px;padding:16px 14px;font-family:var(--sans);cursor:pointer;text-align:left;transition:opacity 0.18s;display:flex;flex-direction:column;gap:8px;}
+.access-btn:hover{opacity:0.85;}
+.acc-front{background:var(--navy);color:#fff;}
+.acc-guest{background:var(--teal-bg);color:var(--teal);}
+.acc-pkg{background:var(--gold-bg);color:var(--gold);}
+.acc-garage{background:var(--sand-mid);color:var(--text-mid);}
+.access-btn svg{opacity:0.8;}
+.access-label{font-size:13px;font-weight:600;display:block;}
+.access-sub{font-size:11px;opacity:0.6;display:block;}
+.access-btn.triggered .access-label::after{content:" ✓";}
+
+/* Package banner */
+.pkg-banner{background:var(--coral-bg);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;}
+.pkg-dot{width:8px;height:8px;background:var(--coral);border-radius:50%;flex-shrink:0;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+.pkg-text{flex:1;}
+.pkg-title{font-size:13px;font-weight:600;color:var(--text);}
+.pkg-sub{font-size:11px;color:var(--text-mid);margin-top:1px;}
+.pkg-cta{border:none;background:var(--coral);color:#fff;border-radius:9px;padding:8px 14px;font-family:var(--sans);font-size:12px;font-weight:600;cursor:pointer;flex-shrink:0;transition:opacity 0.18s;}
+.pkg-cta:hover{opacity:0.85;}
+.pkg-cta.done{background:var(--green);pointer-events:none;}
+
+/* Loading */
+.loading{padding:60px 24px;text-align:center;}
+.loading-ring{width:28px;height:28px;border:1.5px solid var(--sand-deep);border-top-color:var(--teal);border-radius:50%;animation:spin 0.75s linear infinite;margin:0 auto 14px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading-msg{font-size:14px;color:var(--text-faint);}
+
+/* Modal */
+.modal-bg{position:fixed;inset:0;background:rgba(15,31,46,0.55);display:flex;align-items:flex-end;justify-content:center;z-index:1000;}
+.modal-bg.hidden{display:none;}
+.modal{background:var(--white);border-radius:22px 22px 0 0;width:100%;max-width:430px;overflow:hidden;animation:slideup 0.28s cubic-bezier(0.22,1,0.36,1);}
+@keyframes slideup{from{transform:translateY(50px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.modal-head{padding:20px 22px 14px;border-bottom:1px solid var(--border);}
+.modal-handle{width:36px;height:4px;background:var(--sand-deep);border-radius:2px;margin:0 auto 16px;}
+.modal-title{font-size:16px;font-weight:700;color:var(--text);}
+.modal-sub{font-size:13px;color:var(--text-faint);margin-top:2px;}
+.modal-body{padding:18px 22px;}
+.modal-foot{padding:12px 22px 28px;display:flex;gap:9px;}
+.mf-btn{flex:1;border:none;border-radius:12px;padding:13px;font-family:var(--sans);font-size:14px;font-weight:600;cursor:pointer;transition:opacity 0.18s;}
+.mf-btn:hover{opacity:0.82;}
+.mf-cancel{background:var(--sand-mid);color:var(--text-mid);}
+.mf-go{background:var(--teal-light);color:#fff;}
+.mf-gold{background:var(--gold);color:#fff;}
+
+/* Neighbor message modal */
+.nbr-modal-row{display:flex;align-items:center;gap:11px;margin-bottom:16px;}
+.msg-textarea{width:100%;border:0.5px solid var(--border);border-radius:12px;padding:13px;font-family:var(--sans);font-size:14px;color:var(--text);background:var(--sand);resize:none;height:90px;line-height:1.55;}
+.msg-textarea:focus{outline:none;border-color:var(--teal);}
+.channel-row{display:flex;gap:8px;margin-top:12px;}
+.ch-btn{flex:1;border:0.5px solid var(--border);border-radius:10px;padding:9px;font-family:var(--sans);font-size:12px;font-weight:600;cursor:pointer;text-align:center;transition:all 0.18s;color:var(--text-mid);background:transparent;}
+.ch-btn:hover{background:var(--sand-mid);}
+.ch-btn.selected{background:var(--teal-bg);color:var(--teal);border-color:var(--teal);}
+
+/* Lunch group modal */
+.lunch-invitee-list{display:flex;flex-direction:column;gap:9px;}
+.li-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:var(--sand);}
+.li-check{accent-color:var(--teal);width:15px;height:15px;cursor:pointer;}
+.li-name{font-size:13px;font-weight:600;color:var(--text);flex:1;}
+.li-unit{font-size:11px;color:var(--text-faint);}
+
+/* Refresh */
+.refresh-wrap{padding:24px;text-align:center;}
+.refresh-btn{background:var(--navy);color:#fff;border:none;border-radius:28px;padding:12px 28px;font-family:var(--sans);font-size:14px;font-weight:600;cursor:pointer;transition:opacity 0.18s;}
+.refresh-btn:hover{opacity:0.82;}
+.refresh-btn:disabled{opacity:0.35;cursor:default;}
+.pw{font-size:11px;color:var(--text-faint);margin-top:10px;}
+.hidden{display:none;}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- Header -->
+  <div class="hd">
+    <div class="hd-bg"></div>
+    <div class="hd-content">
+      <div class="hd-top">
+        <div class="hd-wordmark">
+          <div class="hd-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round">
+              <path d="M3 12l9-9 9 9M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/>
+            </svg>
+          </div>
+          <span class="hd-brand">ButterflyMX</span>
+        </div>
+        <span class="hd-time" id="hd-time"></span>
+      </div>
+      <div class="hd-greeting">Good morning, <em>Kaustav.</em></div>
+      <div class="hd-addr">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        1405 El Camino Real · Unit 512 · Redwood City
+      </div>
+    </div>
+    <div class="status-strip">
+      <div class="stat"><div class="stat-val" id="stat-home">—</div><div class="stat-lbl">Home today</div></div>
+      <div class="stat"><div class="stat-val" id="stat-lunch">—</div><div class="stat-lbl">Up for lunch</div></div>
+      <div class="stat"><div class="stat-val" id="stat-events">2</div><div class="stat-lbl">Events this week</div></div>
+      <div class="stat"><div class="stat-val" id="stat-amenity">3</div><div class="stat-lbl">Spaces open</div></div>
+    </div>
+  </div>
+
+  <!-- Package notification -->
+  <div style="padding:16px 20px 0;">
+    <div class="pkg-banner">
+      <div class="pkg-dot"></div>
+      <div class="pkg-text">
+        <div class="pkg-title">Package arrived — Mailroom B</div>
+        <div class="pkg-sub">Delivered 8:14am · Amazon · 1 item</div>
+      </div>
+      <button class="pkg-cta" onclick="triggerMailroomFromBanner(this)">Open mailroom</button>
+    </div>
+  </div>
+
+  <div class="loading" id="loading">
+    <div class="loading-ring"></div>
+    <div class="loading-msg" id="loading-msg">Checking who's home today...</div>
+  </div>
+
+  <div id="dynamic-content" class="hidden"></div>
+
+  <div id="static-sections" class="hidden">
+
+    <!-- Quick access -->
+    <div class="sec">
+      <div class="lbl">Building access</div>
+      <div class="access-grid">
+        <button class="access-btn acc-front" onclick="triggerDoor(this,'Front door')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="12" r="1.5" fill="currentColor"/></svg>
+          <div><span class="access-label">Front door</span><span class="access-sub">Tap to unlock</span></div>
+        </button>
+        <button class="access-btn acc-guest" onclick="openGuestModal()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+          <div><span class="access-label">Guest access</span><span class="access-sub">Create a pass</span></div>
+        </button>
+        <button class="access-btn acc-pkg" onclick="triggerDoor(this,'Mailroom')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+          <div><span class="access-label">Mailroom</span><span class="access-sub">Pickup package</span></div>
+        </button>
+        <button class="access-btn acc-garage" onclick="triggerDoor(this,'Garage')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+          <div><span class="access-label">Garage</span><span class="access-sub">Gate access</span></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Amenities -->
+    <div class="sec">
+      <div class="lbl">Building amenities</div>
+      <div class="amenity-grid" id="amenity-grid"></div>
+    </div>
+
+    <!-- Events -->
+    <div class="sec">
+      <div class="lbl">Community events</div>
+      <div class="event-list" id="event-list"></div>
+    </div>
+
+    <div class="refresh-wrap">
+      <button class="refresh-btn" id="refresh-btn" onclick="run()">Refresh briefing</button>
+      <div class="pw">ButterflyMX Community Intelligence · Powered by Claude</div>
+    </div>
+  </div>
+</div>
+
+<!-- Neighbor message modal -->
+<div class="modal-bg hidden" id="msg-modal" onclick="bgClose(event,'msg-modal')">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-handle"></div>
+      <div class="modal-title" id="msg-modal-title">Message neighbor</div>
+      <div class="modal-sub">They'll receive a notification via the ButterflyMX app</div>
+    </div>
+    <div class="modal-body">
+      <div class="nbr-modal-row">
+        <div class="av" id="msg-av" style="width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#fff;"></div>
+        <div id="msg-name-role" style="font-size:13px;color:var(--text-faint);"></div>
+      </div>
+      <textarea class="msg-textarea" id="msg-body"></textarea>
+      <div class="channel-row">
+        <button class="ch-btn selected" onclick="selectChannel(this)">ButterflyMX</button>
+        <button class="ch-btn" onclick="selectChannel(this)">iMessage</button>
+        <button class="ch-btn" onclick="selectChannel(this)">WhatsApp</button>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="mf-btn mf-cancel" onclick="closeModal('msg-modal')">Cancel</button>
+      <button class="mf-btn mf-go" onclick="sendMsg()">Send message</button>
+    </div>
+  </div>
+</div>
+
+<!-- Lunch group modal -->
+<div class="modal-bg hidden" id="lunch-modal" onclick="bgClose(event,'lunch-modal')">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-handle"></div>
+      <div class="modal-title">Organise a lunch group</div>
+      <div class="modal-sub">Select neighbours to invite</div>
+    </div>
+    <div class="modal-body">
+      <div class="lunch-invitee-list" id="lunch-invitee-list"></div>
+      <div style="margin-top:14px;">
+        <textarea class="msg-textarea" id="lunch-msg" style="height:72px;">Hey neighbours — heading out for lunch today, anyone want to join? Thinking around noon 🌮</textarea>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="mf-btn mf-cancel" onclick="closeModal('lunch-modal')">Cancel</button>
+      <button class="mf-btn mf-gold" onclick="sendLunchInvite()">Send invites</button>
+    </div>
+  </div>
+</div>
+
+<!-- Guest access modal -->
+<div class="modal-bg hidden" id="guest-modal" onclick="bgClose(event,'guest-modal')">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-handle"></div>
+      <div class="modal-title">Create guest pass</div>
+      <div class="modal-sub">Share a one-time or scheduled access link</div>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <input type="text" placeholder="Guest name" style="border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;font-family:var(--sans);font-size:14px;color:var(--text);background:var(--sand);width:100%;">
+        <input type="text" placeholder="Phone or email" style="border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;font-family:var(--sans);font-size:14px;color:var(--text);background:var(--sand);width:100%;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;">
+          <div>
+            <div style="font-size:11px;font-weight:600;color:var(--text-faint);margin-bottom:6px;letter-spacing:0.06em;text-transform:uppercase;">Access date</div>
+            <input type="date" style="border:0.5px solid var(--border);border-radius:10px;padding:10px 12px;font-family:var(--sans);font-size:13px;color:var(--text);background:var(--sand);width:100%;">
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:600;color:var(--text-faint);margin-bottom:6px;letter-spacing:0.06em;text-transform:uppercase;">Access type</div>
+            <select style="border:0.5px solid var(--border);border-radius:10px;padding:10px 12px;font-family:var(--sans);font-size:13px;color:var(--text);background:var(--sand);width:100%;">
+              <option>One-time</option>
+              <option>All day</option>
+              <option>Recurring</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="mf-btn mf-cancel" onclick="closeModal('guest-modal')">Cancel</button>
+      <button class="mf-btn mf-go" onclick="createGuestPass()">Create & share pass</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const D={
+  neighbors:[
+    {name:"Maya Patel",    unit:"508",init:"MP",color:"#7C3AED",status:"home",  lunch:true, note:"WFH today · designer",    tags:["Up for lunch","WFH"]},
+    {name:"Carlos Rivera", unit:"514",init:"CR",color:"#0E7490",status:"home",  lunch:true, note:"WFH today · engineer",    tags:["Up for lunch","WFH"]},
+    {name:"Jess Hartley",  unit:"502",init:"JH",color:"#C2410C",status:"home",  lunch:false,note:"WFH today · teacher",     tags:["WFH"]},
+    {name:"Dev Sharma",    unit:"511",init:"DS",color:"#166534",status:"maybe", lunch:true, note:"Maybe home after 11am",   tags:["Up for lunch"]},
+    {name:"Priya Ng",      unit:"519",init:"PN",color:"#9D174D",status:"away",  lunch:false,note:"Out of building today",   tags:[]},
+  ],
+  amenities:[
+    {name:"Co-working lounge",icon:"briefcase",capacity:"4 / 8 seats",status:"open",floor:"Floor 2"},
+    {name:"Rooftop terrace",  icon:"sun",      capacity:"2 of 6 spots",status:"open",floor:"Floor 6"},
+    {name:"Fitness centre",   icon:"activity", capacity:"Busy now",    status:"busy",floor:"Floor 1"},
+    {name:"Conference room",  icon:"monitor",  capacity:"Free 11am–2pm",status:"open",floor:"Floor 2"},
+  ],
+  events:[
+    {day:"12",mon:"Mar",title:"Building social hour",meta:"7:00pm · Rooftop · Drinks provided",going:false},
+    {day:"15",mon:"Mar",title:"Yoga in the courtyard",meta:"8:00am · Courtyard · Free for residents",going:false},
+    {day:"19",mon:"Mar",title:"Book club – March pick",meta:"6:30pm · Co-working lounge · RSVP req.",going:false},
+  ]
+};
+
+const MSGS=["Checking who's home today...","Scanning building activity...","Checking amenity availability...","Writing your briefing..."];
+function fmtDate(d){const dn=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],mn=["January","February","March","April","May","June","July","August","September","October","November","December"];return`${dn[d.getDay()]}, ${mn[d.getMonth()]} ${d.getDate()}`;}
+function fmtTime(){const n=new Date(),h=n.getHours(),m=n.getMinutes(),ap=h>=12?"PM":"AM";return`${h%12||12}:${m.toString().padStart(2,"0")} ${ap}`;}
+
+// Update stats
+function updateStats(){
+  const home=D.neighbors.filter(n=>n.status==="home").length;
+  const lunch=D.neighbors.filter(n=>n.lunch).length;
+  document.getElementById("stat-home").textContent=home;
+  document.getElementById("stat-lunch").textContent=lunch;
+}
+
+// Modal helpers
+function closeModal(id){document.getElementById(id).classList.add("hidden");}
+function bgClose(e,id){if(e.target===e.currentTarget)closeModal(id);}
+function selectChannel(btn){document.querySelectorAll(".ch-btn").forEach(b=>b.classList.remove("selected"));btn.classList.add("selected");}
+
+// Door access
+function triggerMailroomFromBanner(btn){
+  btn.textContent="Unlocking...";
+  btn.style.opacity="0.7";
+  setTimeout(()=>{
+    btn.textContent="Unlocked ✓";
+    btn.classList.add("done");
+  },900);
+}
+
+function triggerDoor(btn,name){
+  const orig=btn.querySelector(".access-sub").textContent;
+  btn.querySelector(".access-sub").textContent="Unlocking...";
+  btn.classList.add("triggered");
+  setTimeout(()=>{
+    btn.querySelector(".access-sub").textContent="Unlocked ✓";
+    setTimeout(()=>{btn.querySelector(".access-sub").textContent=orig;btn.classList.remove("triggered");},2500);
+  },900);
+}
+
+// Message modal
+let currentNeighbor=null;
+function openMsg(idx){
+  currentNeighbor=idx;
+  const n=D.neighbors[idx];
+  document.getElementById("msg-modal-title").textContent=`Message ${n.name}`;
+  const av=document.getElementById("msg-av");
+  av.textContent=n.init;av.style.background=n.color;
+  document.getElementById("msg-name-role").textContent=`Unit ${n.unit} · ${n.note}`;
+  document.getElementById("msg-body").value=`Hey ${n.name.split(" ")[0]}! Heading out for lunch around noon — want to join? 🥗`;
+  document.getElementById("msg-modal").classList.remove("hidden");
+}
+function sendMsg(){
+  closeModal("msg-modal");
+  const btn=document.getElementById(`nbr-btn-${currentNeighbor}`);
+  if(btn){btn.classList.add("sent");btn.textContent="Sent ✓";}
+}
+
+// Lunch group
+function openLunchModal(){
+  const lp=D.neighbors.filter(n=>n.lunch);
+  document.getElementById("lunch-invitee-list").innerHTML=lp.map((n,i)=>`
+    <div class="li-row">
+      <input type="checkbox" class="li-check" checked id="li-${i}">
+      <div class="av" style="width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:#fff;background:${n.color};flex-shrink:0">${n.init}</div>
+      <span class="li-name">${n.name}</span>
+      <span class="li-unit">Unit ${n.unit}</span>
+    </div>`).join("");
+  document.getElementById("lunch-modal").classList.remove("hidden");
+}
+function sendLunchInvite(){
+  closeModal("lunch-modal");
+  const strip=document.getElementById("lunch-strip-btn");
+  if(strip){strip.classList.add("done");strip.textContent="Invites sent ✓";}
+}
+
+// Guest pass
+function openGuestModal(){document.getElementById("guest-modal").classList.remove("hidden");}
+function createGuestPass(){closeModal("guest-modal");alert("Guest pass created and shared!");}
+
+// Amenities
+function renderAmenities(){
+  document.getElementById("amenity-grid").innerHTML=D.amenities.map((a,i)=>{
+    const icons={briefcase:'<path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>',sun:'<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>',activity:'<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',monitor:'<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>'};
+    const isBusy=a.status==="busy";
+    const iconBg=isBusy?"#FFF1EE":i===0?"#E0F2FE":i===1?"#FDF6E7":i===3?"#E0F2FE":"#F0FDF4";
+    const iconStroke=isBusy?"#C2410C":i===0?"#0E7490":i===1?"#C4922A":i===3?"#0E7490":"#166534";
+    return`<div class="amenity-card${a.booked?" booked":""}" id="amenity-${i}">
+      <div class="amenity-icon" style="background:${iconBg}">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${iconStroke}" stroke-width="2" stroke-linecap="round">${icons[a.icon]}</svg>
+      </div>
+      <div class="amenity-name">${a.name}</div>
+      <div class="amenity-avail ${isBusy?"busy":"open"}">${a.capacity}</div>
+      <div class="amenity-meta" style="font-size:11px;color:var(--text-faint);margin-top:2px;">${a.floor}</div>
+      <button class="amenity-book ${isBusy?"ab-busy":a.booked?"ab-booked":"ab-open"}" onclick="bookAmenity(${i},this)">${a.booked?"Booked ✓":isBusy?"Currently busy":"Reserve spot"}</button>
+    </div>`;
+  }).join("");
+}
+function bookAmenity(i,btn){
+  D.amenities[i].booked=true;
+  btn.className="amenity-book ab-booked";
+  btn.textContent="Booked ✓";
+  document.getElementById(`amenity-${i}`).classList.add("booked");
+}
+
+// Events
+function renderEvents(){
+  document.getElementById("event-list").innerHTML=D.events.map((e,i)=>`
+    <div class="event-row">
+      <div class="event-date"><div class="event-day">${e.day}</div><div class="event-mon">${e.mon}</div></div>
+      <div class="event-info">
+        <div class="event-title">${e.title}</div>
+        <div class="event-meta">${e.meta}</div>
+      </div>
+      <button class="event-rsvp${e.going?" done":""}" id="evt-${i}" onclick="rsvp(${i})">${e.going?"Going ✓":"RSVP"}</button>
+    </div>`).join("");
+}
+function rsvp(i){
+  D.events[i].going=true;
+  const btn=document.getElementById(`evt-${i}`);
+  btn.classList.add("done");btn.textContent="Going ✓";
+}
+
+async function run(){
+  const rb=document.getElementById("refresh-btn");
+  if(rb)rb.disabled=true;
+  document.getElementById("dynamic-content").innerHTML="";
+  document.getElementById("dynamic-content").classList.add("hidden");
+  document.getElementById("static-sections").classList.add("hidden");
+  document.getElementById("loading").classList.remove("hidden");
+
+  let mi=0;
+  const mel=document.getElementById("loading-msg");
+  const iv=setInterval(()=>{mi=(mi+1)%MSGS.length;mel.textContent=MSGS[mi];},1300);
+
+  const homeNeighbors=D.neighbors.filter(n=>n.status==="home");
+  const lunchNeighbors=D.neighbors.filter(n=>n.lunch);
+  const openAmenities=D.amenities.filter(a=>a.status==="open");
+
+  const prompt=`You are ButterflyMX's community AI for a residential apartment building. Write a warm, friendly morning briefing for resident Kaustav in Unit 512.
+
+Context:
+- Date: ${fmtDate(new Date())}
+- Neighbours home today: ${homeNeighbors.map(n=>n.name+" ("+n.note+")").join(", ")}
+- Up for lunch: ${lunchNeighbors.map(n=>n.name).join(", ")}
+- Open amenities: ${openAmenities.map(a=>a.name).join(", ")}
+- 1 package waiting in Mailroom B
+
+Return ONLY valid JSON, no markdown fences:
+{
+  "greeting": "one warm sentence about today in the building, reference specific neighbours or something seasonal. max 20 words.",
+  "lunch_suggestion": "casual suggestion naming specific neighbours for lunch. max 25 words. friendly tone.",
+  "community_tip": "one smart observation about building life today — an amenity, timing tip, or serendipitous connection. max 2 sentences."
+}`;
+
+  let ai;
+  try{
+    const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:400,messages:[{role:"user",content:prompt}]})});
+    const j=await res.json();
+    ai=JSON.parse(j.content[0].text.replace(/```json|```/g,"").trim());
+  }catch(e){
+    ai={
+      greeting:"Four of your neighbours are home today — it's shaping up to be a lively floor.",
+      lunch_suggestion:"Maya and Carlos are both free around noon — great chance to finally put a face to the units.",
+      community_tip:"The co-working lounge is only half full right now, and it clears out before noon — perfect window before the lunchtime rush. Dev might swing by after 11 if you want a familiar face while you work."
+    };
+  }
+
+  clearInterval(iv);
+  document.getElementById("loading").classList.add("hidden");
+  updateStats();
+  renderDynamic(ai);
+}
+
+function renderDynamic(ai){
+  const homeNeighbors=D.neighbors.filter(n=>n.status==="home");
+  const lunchNeighbors=D.neighbors.filter(n=>n.lunch);
+
+  const html=`
+  <div class="sec">
+    <div class="lbl">Today in your building</div>
+    <div class="insight-card">
+      <div class="insight-eyebrow">ButterflyMX AI · ${fmtDate(new Date())}</div>
+      <div class="insight-text">"${ai.greeting}"</div>
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.08);font-size:13px;color:rgba(255,255,255,0.55);line-height:1.6;">${ai.community_tip}</div>
+      <div class="insight-actions">
+        <button class="ia-btn ia-primary" onclick="openLunchModal()">Organise lunch</button>
+        <button class="ia-btn ia-secondary" onclick="document.getElementById('amenity-grid').scrollIntoView({behavior:'smooth'})">Check amenities</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="lbl">Neighbours home today</div>
+    <div class="neighbor-list">
+      ${homeNeighbors.map((n,i)=>{
+        const realIdx=D.neighbors.indexOf(n);
+        return`<div class="nbr-row">
+          <div class="nbr-av" style="background:${n.color}">
+            ${n.init}
+            <div class="nbr-status ${n.status==="home"?"s-home":n.status==="maybe"?"s-maybe":"s-away"}"></div>
+          </div>
+          <div class="nbr-info">
+            <div class="nbr-name">${n.name}</div>
+            <div class="nbr-unit">Unit ${n.unit}</div>
+            <div style="display:flex;gap:5px;margin-top:4px;flex-wrap:wrap;">
+              ${n.tags.map(t=>`<span class="nbr-tag ${t==="Up for lunch"?"t-lunch":t==="WFH"?"t-wfh":"t-free"}">${t}</span>`).join("")}
+            </div>
+          </div>
+          <div class="nbr-action">
+            <button class="msg-btn" id="nbr-btn-${realIdx}" onclick="openMsg(${realIdx})">Message</button>
+          </div>
+        </div>`;
+      }).join("")}
+    </div>
+    <div class="lunch-strip" style="margin-top:14px;">
+      <div class="lunch-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+      </div>
+      <div class="lunch-text">
+        <div class="lunch-title">${ai.lunch_suggestion}</div>
+        <div class="lunch-sub">${lunchNeighbors.length} neighbours available around noon</div>
+      </div>
+      <button class="lunch-cta" id="lunch-strip-btn" onclick="openLunchModal()">Invite all</button>
+    </div>
+  </div>`;
+
+  const el=document.getElementById("dynamic-content");
+  el.innerHTML=html;
+  el.classList.remove("hidden");
+
+  renderAmenities();
+  renderEvents();
+  document.getElementById("static-sections").classList.remove("hidden");
+  const rb=document.getElementById("refresh-btn");
+  if(rb)rb.disabled=false;
+}
+
+document.getElementById("hd-time").textContent=fmtTime();
+run();
+</script>
+</body>
+</html>

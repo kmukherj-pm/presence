@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Envoy · Morning Briefing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --cream:#F9F7F2;--cream-mid:#F2EFE6;--cream-deep:#E8E3D8;
+  --ink:#1A1814;--ink-mid:#5C5750;--ink-faint:#9B9489;
+  --amber:#B8750A;--amber-bg:#FEF6E4;
+  --green:#2A6E45;--green-bg:#EAF4EE;
+  --blue:#185FA5;--blue-bg:#E6F1FB;
+  --border:rgba(26,24,20,0.09);
+  --serif:'Lora',Georgia,serif;
+  --sans:'DM Sans',-apple-system,sans-serif;
+}
+body{background:var(--cream);font-family:var(--sans);color:var(--ink);min-height:100vh;}
+.shell{max-width:440px;margin:0 auto;padding-bottom:80px;}
+.hd{padding:44px 24px 20px;border-bottom:1px solid var(--border);}
+.hd-eyebrow{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+.hd-logo{background:var(--ink);color:var(--cream);font-size:10px;font-weight:600;letter-spacing:0.14em;padding:4px 10px 4px 8px;border-radius:20px;display:flex;align-items:center;gap:6px;}
+.hd-dot{width:6px;height:6px;background:#E8A020;border-radius:50%;flex-shrink:0;}
+.hd-date{font-size:12px;color:var(--ink-faint);letter-spacing:0.04em;}
+.hd-name{font-family:var(--serif);font-size:30px;font-weight:400;line-height:1.2;}
+.hd-name em{font-style:italic;}
+.hd-sub{font-size:14px;color:var(--ink-mid);margin-top:5px;}
+.commit-banner{margin:16px 24px 0;border-radius:14px;overflow:hidden;}
+.commit-inner{padding:16px 18px;display:flex;align-items:center;gap:14px;background:var(--ink);}
+.commit-text{flex:1;}
+.commit-q{font-size:14px;font-weight:500;color:#fff;margin-bottom:2px;}
+.commit-sub{font-size:12px;color:rgba(255,255,255,0.45);}
+.commit-btns{display:flex;gap:8px;flex-shrink:0;}
+.cb{border:none;border-radius:22px;padding:8px 14px;font-family:var(--sans);font-size:13px;font-weight:500;cursor:pointer;transition:opacity 0.18s;white-space:nowrap;}
+.cb-yes{background:#E8A020;color:#1A1814;}
+.cb-no{background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.7);}
+.cb:hover{opacity:0.82;}
+.commit-done{padding:14px 18px;display:flex;align-items:center;gap:10px;}
+.commit-done-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.commit-done-text{font-size:13px;font-weight:500;}
+.commit-done-sub{font-size:11px;color:var(--ink-faint);}
+.loading{padding:56px 24px;text-align:center;}
+.loading-ring{width:28px;height:28px;border:1.5px solid var(--cream-deep);border-top-color:var(--ink-mid);border-radius:50%;animation:spin 0.75s linear infinite;margin:0 auto 14px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading-msg{font-size:14px;color:var(--ink-faint);}
+.sec{padding:22px 24px;border-bottom:1px solid var(--border);animation:up 0.4s ease both;}
+@keyframes up{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.sec:nth-child(1){animation-delay:0.04s}.sec:nth-child(2){animation-delay:0.10s}
+.sec:nth-child(3){animation-delay:0.16s}.sec:nth-child(4){animation-delay:0.22s}
+.sec:nth-child(5){animation-delay:0.28s}.sec:nth-child(6){animation-delay:0.34s}
+.sec:nth-child(7){animation-delay:0.40s}
+.lbl{font-size:10px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:14px;}
+.rec-row{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px;}
+.rec-orb{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.rec-hl{font-family:var(--serif);font-size:20px;font-weight:500;line-height:1.3;color:var(--ink);flex:1;}
+.rec-body{font-size:14px;line-height:1.75;color:var(--ink-mid);margin-bottom:16px;}
+.conf-wrap{display:flex;align-items:center;gap:10px;margin-bottom:18px;}
+.conf-track{flex:1;height:3px;background:var(--cream-deep);border-radius:2px;overflow:hidden;}
+.conf-fill{height:100%;border-radius:2px;transition:width 1.2s cubic-bezier(0.22,1,0.36,1);}
+.conf-pct{font-size:12px;font-weight:600;min-width:36px;text-align:right;}
+.conf-note{font-size:11px;color:var(--ink-faint);}
+.leaveby{background:var(--amber-bg);border-radius:12px;padding:13px 16px;display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.leaveby-main{flex:1;}
+.leaveby-time{font-size:18px;font-weight:600;color:var(--amber);}
+.leaveby-label{font-size:12px;color:var(--ink-mid);}
+.leaveby-why{font-size:11px;color:var(--ink-faint);margin-top:1px;}
+.checkin-btn{background:var(--ink);color:var(--cream);border:none;border-radius:22px;padding:9px 16px;font-family:var(--sans);font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;transition:all 0.25s;}
+.checkin-btn:hover{opacity:0.82;}
+.checkin-btn.done{background:var(--green);}
+.col-list{display:flex;flex-direction:column;gap:13px;}
+.col-row{display:flex;align-items:center;gap:11px;}
+.av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#fff;flex-shrink:0;}
+.col-info{flex:1;}
+.col-name{font-size:14px;font-weight:500;color:var(--ink);}
+.col-meta{font-size:12px;color:var(--ink-faint);}
+.col-prob{text-align:right;min-width:72px;}
+.col-pct{font-size:13px;font-weight:600;margin-bottom:4px;}
+.mini-track{height:2.5px;background:var(--cream-deep);border-radius:2px;overflow:hidden;}
+.mini-fill{height:100%;border-radius:2px;}
+.notify-strip{margin-top:14px;padding-top:14px;border-top:1px solid var(--border);}
+.notify-btn{width:100%;background:transparent;border:0.5px solid var(--border);border-radius:10px;padding:11px 16px;font-family:var(--sans);font-size:13px;font-weight:500;color:var(--ink-mid);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background 0.18s;}
+.notify-btn:hover{background:var(--cream-mid);}
+.notify-btn.sent{background:var(--green-bg);color:var(--green);border-color:transparent;pointer-events:none;}
+.lunch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
+.lunch-card{background:var(--cream-mid);border-radius:14px;padding:14px 10px;text-align:center;}
+.lunch-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff;margin:0 auto 9px;}
+.lunch-name{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:4px;}
+.lunch-why{font-size:11px;color:var(--ink-faint);line-height:1.45;}
+.lunch-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.la-btn{border:none;border-radius:12px;padding:12px 10px;font-family:var(--sans);font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:opacity 0.18s;}
+.la-btn:hover{opacity:0.82;}
+.la-slack{background:#4A154B;color:#fff;}
+.la-cal{background:var(--blue-bg);color:var(--blue);}
+.la-btn.done{opacity:0.5;pointer-events:none;}
+.desk-card{background:var(--amber-bg);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.desk-loc{font-family:var(--serif);font-size:19px;font-weight:400;color:var(--ink);margin-bottom:6px;}
+.desk-why{font-size:13px;color:var(--ink-mid);line-height:1.55;margin-bottom:12px;}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px;}
+.chip{font-size:11px;font-weight:500;background:rgba(26,24,20,0.07);color:var(--ink-mid);padding:3px 10px;border-radius:20px;}
+.desk-cta-row{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.desk-btn{border:none;border-radius:12px;padding:12px 10px;font-family:var(--sans);font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:opacity 0.18s;}
+.desk-btn:hover{opacity:0.82;}
+.desk-book{background:var(--ink);color:var(--cream);}
+.desk-alt{background:var(--cream-deep);color:var(--ink-mid);}
+.desk-btn.done{background:var(--green);color:#fff;pointer-events:none;}
+.desk-btn.hide{display:none;}
+.conv-list{display:flex;flex-direction:column;gap:10px;}
+.conv-row{background:var(--cream-mid);border-radius:12px;padding:13px 15px;display:flex;align-items:center;gap:12px;}
+.conv-info{flex:1;}
+.conv-title{font-size:14px;font-weight:500;color:var(--ink);}
+.conv-meta{font-size:12px;color:var(--ink-faint);margin-top:2px;}
+.conv-btn{border:none;border-radius:10px;padding:8px 14px;background:var(--green-bg);color:var(--green);font-family:var(--sans);font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:opacity 0.18s;}
+.conv-btn:hover{opacity:0.82;}
+.conv-btn.done{background:var(--cream-deep);color:var(--ink-faint);pointer-events:none;}
+.nudge-card{background:var(--ink);border-radius:14px;padding:18px 20px;}
+.nudge-lbl{font-size:9px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:9px;}
+.nudge-text{font-family:var(--serif);font-size:15px;font-style:italic;line-height:1.65;color:rgba(255,255,255,0.88);}
+.mtg-list{display:flex;flex-direction:column;gap:13px;}
+.mtg-row{display:flex;align-items:flex-start;gap:10px;}
+.mtg-time{font-size:11px;font-weight:600;color:var(--ink-faint);width:50px;flex-shrink:0;padding-top:2px;line-height:1.3;}
+.mtg-pip{width:3px;border-radius:2px;align-self:stretch;min-height:34px;flex-shrink:0;}
+.mtg-info{flex:1;}
+.mtg-title{font-size:14px;font-weight:500;color:var(--ink);display:flex;align-items:center;gap:7px;flex-wrap:wrap;line-height:1.4;}
+.mtg-badge{font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;}
+.b-in{background:var(--green-bg);color:var(--green);}
+.b-re{background:var(--cream-deep);color:var(--ink-faint);}
+.mtg-who{font-size:12px;color:var(--ink-faint);margin-top:2px;}
+.refresh-wrap{padding:24px;text-align:center;}
+.refresh-btn{background:var(--ink);color:var(--cream);border:none;border-radius:28px;padding:11px 26px;font-family:var(--sans);font-size:14px;font-weight:500;cursor:pointer;transition:opacity 0.18s;}
+.refresh-btn:hover{opacity:0.82;}
+.refresh-btn:disabled{opacity:0.38;cursor:default;}
+.pw{font-size:11px;color:var(--ink-faint);margin-top:10px;}
+
+/* Modals */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.42);display:flex;align-items:flex-end;justify-content:center;z-index:1000;padding:0;}
+.modal-bg.hidden{display:none;}
+.modal{background:var(--cream);border-radius:22px 22px 0 0;width:100%;max-width:440px;overflow:hidden;animation:slideup 0.28s cubic-bezier(0.22,1,0.36,1);}
+@keyframes slideup{from{transform:translateY(60px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.modal-head{padding:20px 22px 14px;border-bottom:1px solid var(--border);}
+.modal-title{font-size:16px;font-weight:600;color:var(--ink);margin-bottom:2px;}
+.modal-sub{font-size:12px;color:var(--ink-faint);}
+.modal-body{padding:18px 22px;}
+.slack-preview{background:#F5EEF8;border-radius:12px;padding:14px;}
+.slack-head{display:flex;align-items:center;gap:9px;margin-bottom:10px;}
+.slack-av{width:32px;height:32px;border-radius:8px;background:#4A154B;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:#fff;}
+.slack-to{font-size:13px;font-weight:600;color:#1D1C1D;}
+.slack-channel{font-size:11px;color:#616061;}
+.slack-msg{font-size:13px;color:#1D1C1D;line-height:1.6;}
+.modal-to-label{font-size:11px;color:var(--ink-faint);margin:14px 0 8px;}
+.recipient-chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:4px;}
+.r-chip{background:var(--cream-mid);border-radius:20px;padding:6px 12px;font-size:12px;font-weight:500;color:var(--ink);display:flex;align-items:center;gap:7px;cursor:pointer;}
+.r-chip input[type=checkbox]{accent-color:var(--green);width:13px;height:13px;cursor:pointer;}
+.modal-foot{padding:14px 22px 22px;display:flex;gap:9px;}
+.mf-btn{flex:1;border:none;border-radius:12px;padding:12px;font-family:var(--sans);font-size:14px;font-weight:500;cursor:pointer;transition:opacity 0.18s;}
+.mf-btn:hover{opacity:0.82;}
+.mf-cancel{background:var(--cream-deep);color:var(--ink-mid);}
+.mf-send{background:#4A154B;color:#fff;}
+.mf-book{background:var(--blue);color:#fff;}
+.cal-slot-list{display:flex;flex-direction:column;gap:9px;margin-bottom:4px;}
+.cal-slot{border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;cursor:pointer;transition:background 0.15s;display:flex;align-items:center;gap:10px;}
+.cal-slot:hover{background:var(--cream-mid);}
+.cal-slot.selected{background:var(--blue-bg);border-color:var(--blue);}
+.cal-slot-time{font-size:14px;font-weight:600;color:var(--ink);min-width:90px;}
+.cal-slot-detail{font-size:12px;color:var(--ink-faint);flex:1;}
+.cal-sel-dot{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--border);flex-shrink:0;}
+.cal-slot.selected .cal-sel-dot{background:var(--blue);border-color:var(--blue);}
+.hidden{display:none;}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="hd">
+    <div class="hd-eyebrow">
+      <div class="hd-logo"><div class="hd-dot"></div>ENVOY</div>
+      <span class="hd-date" id="hd-date"></span>
+    </div>
+    <div class="hd-name">Good morning, <em>Kaustav.</em></div>
+    <div class="hd-sub">Your workplace briefing is ready.</div>
+  </div>
+
+  <div class="commit-banner" id="commit-banner">
+    <div class="commit-inner" id="commit-inner">
+      <div class="commit-text">
+        <div class="commit-q">Are you going in today?</div>
+        <div class="commit-sub">Confirming helps your colleagues plan their day</div>
+      </div>
+      <div class="commit-btns">
+        <button class="cb cb-yes" onclick="commitGo()">Going in</button>
+        <button class="cb cb-no" onclick="commitRemote()">Staying home</button>
+      </div>
+    </div>
+    <div class="commit-done hidden" id="commit-done">
+      <div class="commit-done-icon">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div>
+        <div class="commit-done-text" id="commit-done-text"></div>
+        <div class="commit-done-sub" id="commit-done-sub"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="loading" id="loading">
+    <div class="loading-ring"></div>
+    <div class="loading-msg" id="loading-msg">Checking who's coming in today...</div>
+  </div>
+
+  <div id="dynamic-content" class="hidden"></div>
+  <div id="meetings-section" class="hidden">
+    <div class="sec">
+      <div class="lbl">Today's schedule</div>
+      <div class="mtg-list" id="mtg-list"></div>
+    </div>
+  </div>
+  <div id="refresh-section" class="hidden">
+    <div class="refresh-wrap">
+      <button class="refresh-btn" id="refresh-btn" onclick="run()">Regenerate briefing</button>
+      <div class="pw">Envoy Workplace Intelligence · Powered by Claude</div>
+    </div>
+  </div>
+</div>
+
+<!-- Slack modal -->
+<div class="modal-bg hidden" id="slack-modal" onclick="bgClose(event,'slack-modal')">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">Send Slack message</div>
+      <div class="modal-sub">Preview and customise before sending</div>
+    </div>
+    <div class="modal-body">
+      <div class="slack-preview">
+        <div class="slack-head">
+          <div class="slack-av">KM</div>
+          <div>
+            <div class="slack-to">Kaustav Mukherjee</div>
+            <div class="slack-channel" id="slack-channel-label"></div>
+          </div>
+        </div>
+        <div class="slack-msg" id="slack-msg-preview"></div>
+      </div>
+      <div class="modal-to-label">Send to</div>
+      <div class="recipient-chips" id="recipient-chips"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="mf-btn mf-cancel" onclick="closeModal('slack-modal')">Cancel</button>
+      <button class="mf-btn mf-send" onclick="sendSlack()">Send in Slack</button>
+    </div>
+  </div>
+</div>
+
+<!-- Calendar modal -->
+<div class="modal-bg hidden" id="cal-modal" onclick="bgClose(event,'cal-modal')">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">Book lunch meeting</div>
+      <div class="modal-sub" id="cal-modal-sub"></div>
+    </div>
+    <div class="modal-body">
+      <div class="cal-slot-list" id="cal-slot-list"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="mf-btn mf-cancel" onclick="closeModal('cal-modal')">Cancel</button>
+      <button class="mf-btn mf-book" onclick="bookLunch()">Book meeting</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const D={
+  colleagues:[
+    {name:"Sarah Chen",   role:"Engineering Lead", init:"SC",color:"#4A7FA5",prob:89,last:"yesterday", lunch:true, why:"Haven't synced in 2 weeks"},
+    {name:"Marcus Webb",  role:"Product Design",   init:"MW",color:"#7B5EA7",prob:74,last:"2 days ago",lunch:true, why:"Shared roadmap this sprint"},
+    {name:"Lisa Kim",     role:"Customer Success", init:"LK",color:"#A0567A",prob:91,last:"yesterday", lunch:true, why:"Fresh off Cisco Meraki onboarding"},
+    {name:"Priya Patel",  role:"Analytics",        init:"PP",color:"#3D8C6E",prob:66,last:"Monday",    lunch:false,why:""},
+    {name:"Aisha Johnson",role:"UX Research",      init:"AJ",color:"#5D8A3C",prob:78,last:"yesterday", lunch:false,why:""},
+    {name:"Tom Rodriguez",role:"PM – Visitors",    init:"TR",color:"#A07040",prob:47,last:"last week",  lunch:false,why:""},
+  ],
+  meetings:[
+    {time:"9:00am", title:"Product standup",    who:"Full product team",       type:"remote"},
+    {time:"11:00am",title:"Customer interview", who:"Cisco Meraki · Lisa Kim", type:"inperson"},
+    {time:"1:30pm", title:"1:1 with Sarah Chen",who:"Sarah Chen",              type:"inperson"},
+    {time:"3:00pm", title:"Q2 Roadmap review",  who:"PM team · Design",        type:"remote"},
+  ],
+  convertable:[
+    {time:"9:00am", title:"Product standup",   who:"Full product team"},
+    {time:"3:00pm", title:"Q2 Roadmap review", who:"PM team · Design"},
+  ],
+  desk:{loc:"Mission Bay HQ · Floor 3",why:"Sarah and Marcus are booked on this floor. Your 11am interview suite is on the same level — no elevator needed.",chips:["Product & Design cluster","Available all day","Near interview suite"]},
+  lunchSlots:[
+    {time:"12:00 – 12:45pm",detail:"Before your 1:30 · leaves a buffer"},
+    {time:"12:15 – 1:00pm", detail:"Slight overlap window"},
+    {time:"1:00 – 1:25pm",  detail:"Quick 25-min slot · tight but doable"},
+  ],
+  firstInPerson:{time:"11:00am",leaveBy:"10:20am",commute:"~25 min · Caltrain + walk"}
+};
+
+const MSGS=["Checking who's coming in today...","Analysing your schedule...","Scanning desk availability...","Writing your briefing..."];
+function fmtDate(d){const dn=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],mn=["January","February","March","April","May","June","July","August","September","October","November","December"];return`${dn[d.getDay()]}, ${mn[d.getMonth()]} ${d.getDate()}`;}
+function probColor(p){return p>=70?"#2A6E45":p>=50?"#B8750A":"#9B9489";}
+
+function commitGo(){
+  document.getElementById("commit-inner").classList.add("hidden");
+  const d=document.getElementById("commit-done");
+  d.style.background=getComputedStyle(document.documentElement).getPropertyValue('--green-bg');
+  d.querySelector(".commit-done-icon").style.background="#2A6E45";
+  document.getElementById("commit-done-text").style.color="#2A6E45";
+  document.getElementById("commit-done-text").textContent="You're confirmed in today";
+  document.getElementById("commit-done-sub").textContent="Your team can see you're heading in";
+  d.classList.remove("hidden");
+}
+function commitRemote(){
+  document.getElementById("commit-inner").classList.add("hidden");
+  const d=document.getElementById("commit-done");
+  d.style.background="#FEF6E4";
+  d.querySelector(".commit-done-icon").style.background="#B8750A";
+  document.getElementById("commit-done-text").style.color="#B8750A";
+  document.getElementById("commit-done-text").textContent="Working remote today";
+  document.getElementById("commit-done-sub").textContent="Your team can see you're staying home";
+  d.classList.remove("hidden");
+}
+
+function closeModal(id){document.getElementById(id).classList.add("hidden");}
+function bgClose(e,id){if(e.target===e.currentTarget)closeModal(id);}
+
+function openSlack(){
+  const lp=D.colleagues.filter(c=>c.lunch).slice(0,3);
+  updateSlackPreview(lp.map(c=>c.name));
+  const chips=document.getElementById("recipient-chips");
+  chips.innerHTML=lp.map(p=>`<label class="r-chip"><input type="checkbox" checked onchange="updateSlackFromCheckboxes()"> ${p.name}</label>`).join("");
+  document.getElementById("slack-modal").classList.remove("hidden");
+}
+function updateSlackPreview(names){
+  const firsts=names.map(n=>n.split(" ")[0]);
+  const label=firsts.length?`to ${firsts.join(", ")}`:"direct message";
+  document.getElementById("slack-channel-label").textContent=label;
+  document.getElementById("slack-msg-preview").textContent=firsts.length
+    ?`Hey ${firsts.join(", ")} — heading into Mission Bay today. Anyone free to grab lunch around noon? Floor 3, right by the kitchen. 🥗`
+    :"Select at least one person to message.";
+}
+function updateSlackFromCheckboxes(){
+  const checked=[...document.querySelectorAll("#recipient-chips input:checked")].map(i=>i.parentElement.textContent.trim());
+  updateSlackPreview(checked);
+}
+function sendSlack(){
+  closeModal("slack-modal");
+  const btn=document.getElementById("slack-lunch-btn");
+  if(btn){btn.classList.add("done");btn.innerHTML="<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round'><polyline points='20 6 9 17 4 12'/></svg> Sent in Slack";}
+}
+
+let selectedSlot=0;
+function openCal(){
+  const lp=D.colleagues.filter(c=>c.lunch).slice(0,3);
+  document.getElementById("cal-modal-sub").textContent=`Invite ${lp.map(c=>c.name.split(" ")[0]).join(", ")}`;
+  const list=document.getElementById("cal-slot-list");
+  list.innerHTML=D.lunchSlots.map((s,i)=>`
+    <div class="cal-slot${i===0?" selected":""}" onclick="selectSlot(${i},this)">
+      <div class="cal-slot-time">${s.time}</div>
+      <div class="cal-slot-detail">${s.detail}</div>
+      <div class="cal-sel-dot"></div>
+    </div>`).join("");
+  selectedSlot=0;
+  document.getElementById("cal-modal").classList.remove("hidden");
+}
+function selectSlot(i,el){
+  selectedSlot=i;
+  document.querySelectorAll(".cal-slot").forEach((e,j)=>e.classList.toggle("selected",j===i));
+}
+function bookLunch(){
+  closeModal("cal-modal");
+  const btn=document.getElementById("cal-lunch-btn");
+  if(btn){btn.classList.add("done");btn.innerHTML="<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round'><polyline points='20 6 9 17 4 12'/></svg> Meeting booked";}
+}
+const OFFICE={lat:37.7706,lng:-122.3873,name:"Mission Bay HQ",radiusMeters:300};
+
+function haversine(lat1,lng1,lat2,lng2){
+  const R=6371000,r=Math.PI/180;
+  const dLat=(lat2-lat1)*r,dLng=(lat2-lng2)*r; // fixed: lng2-lng1
+  const a=Math.sin(dLat/2)**2+Math.cos(lat1*r)*Math.cos(lat2*r)*Math.sin(dLng/2)**2; // fixed sign
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
+function haversineDist(lat1,lng1,lat2,lng2){
+  const R=6371000,toR=Math.PI/180;
+  const dLat=(lat2-lat1)*toR;
+  const dLng=(lng2-lng1)*toR;
+  const a=Math.sin(dLat/2)**2+Math.cos(lat1*toR)*Math.cos(lat2*toR)*Math.sin(dLng/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
+function attemptCheckIn(btn){
+  if(!navigator.geolocation){
+    showGeoState(btn,"unsupported");
+    return;
+  }
+  btn.disabled=true;
+  btn.textContent="Locating...";
+  navigator.geolocation.getCurrentPosition(
+    pos=>{
+      const dist=haversineDist(pos.coords.latitude,pos.coords.longitude,OFFICE.lat,OFFICE.lng);
+      if(dist<=OFFICE.radiusMeters){
+        btn.classList.add("done");
+        btn.disabled=false;
+        btn.textContent="Checked in ✓";
+      } else {
+        showGeoState(btn,"tooFar",Math.round(dist));
+      }
+    },
+    err=>{
+      showGeoState(btn,err.code===1?"denied":"error");
+    },
+    {enableHighAccuracy:true,timeout:8000,maximumAge:0}
+  );
+}
+
+function showGeoState(btn,state,dist){
+  btn.disabled=false;
+  if(state==="tooFar"){
+    btn.style.background="#A32D2D";
+    btn.style.color="#fff";
+    btn.style.fontSize="11px";
+    btn.textContent=`${dist}m from office`;
+    btn.title=`Must be within ${OFFICE.radiusMeters}m of ${OFFICE.name} to check in`;
+    setTimeout(()=>{
+      btn.style.background="";btn.style.color="";btn.style.fontSize="";
+      btn.textContent="Pre check-in";btn.title="";
+    },3000);
+  } else if(state==="denied"){
+    btn.style.background="var(--amber)";
+    btn.style.color="#fff";
+    btn.style.fontSize="11px";
+    btn.textContent="Enable location";
+    btn.title="Envoy needs location access to verify you're at the office";
+    setTimeout(()=>{
+      btn.style.background="";btn.style.color="";btn.style.fontSize="";
+      btn.textContent="Pre check-in";btn.title="";
+    },3000);
+  } else {
+    btn.textContent="Pre check-in";
+  }
+}
+function notifyColleagues(btn){btn.classList.add("sent");btn.innerHTML="<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round'><polyline points='20 6 9 17 4 12'/></svg> Colleagues notified";}
+
+function bookDesk(btn){btn.classList.add("done");btn.innerHTML="<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round'><polyline points='20 6 9 17 4 12'/></svg> Desk booked";btn.previousElementSibling.classList.add("hide");}
+
+function convertMeeting(btn){
+  const title=btn.closest(".conv-row").querySelector(".conv-title").textContent.trim();
+  btn.classList.add("done");
+  btn.textContent="Room booked";
+  const mtgRows=document.querySelectorAll(".mtg-row");
+  mtgRows.forEach(row=>{
+    const rowTitle=row.querySelector(".mtg-title");
+    if(!rowTitle)return;
+    const titleText=rowTitle.childNodes[0].textContent.trim();
+    if(titleText===title){
+      const pip=row.querySelector(".mtg-pip");
+      const badge=row.querySelector(".mtg-badge");
+      if(pip){
+        pip.style.transition="background 0.4s ease";
+        pip.style.background="#2A6E45";
+      }
+      if(badge){
+        badge.style.transition="all 0.4s ease";
+        badge.className="mtg-badge b-in";
+        badge.textContent="In person";
+      }
+      row.style.transition="background 0.5s ease";
+      row.style.background="var(--green-bg)";
+      row.style.borderRadius="10px";
+      row.style.padding="6px 8px";
+      row.style.margin="0 -8px";
+      setTimeout(()=>{
+        row.style.background="";
+        row.style.borderRadius="";
+        row.style.padding="";
+        row.style.margin="";
+      },1800);
+    }
+  });
+}
+
+async function run(){
+  const rb=document.getElementById("refresh-btn");
+  if(rb)rb.disabled=true;
+  document.getElementById("dynamic-content").innerHTML="";
+  document.getElementById("dynamic-content").classList.add("hidden");
+  document.getElementById("meetings-section").classList.add("hidden");
+  document.getElementById("refresh-section").classList.add("hidden");
+  document.getElementById("loading").classList.remove("hidden");
+  let mi=0;
+  const mel=document.getElementById("loading-msg");
+  const iv=setInterval(()=>{mi=(mi+1)%MSGS.length;mel.textContent=MSGS[mi];},1300);
+  const hi=D.colleagues.filter(c=>c.prob>=60).sort((a,b)=>b.prob-a.prob);
+  const lp=D.colleagues.filter(c=>c.lunch).slice(0,3);
+  const ip=D.meetings.filter(m=>m.type==="inperson");
+  const avg=Math.round(hi.reduce((s,c)=>s+c.prob,0)/hi.length);
+  const prompt=`You are Envoy's morning AI assistant. Generate a workplace briefing for Kaustav.
+Data: Date ${fmtDate(new Date())}, Colleagues likely in: ${hi.map(c=>c.name+" ("+c.prob+"%)").join(", ")}, In-person meetings: ${ip.map(m=>m.title+" at "+m.time).join(", ")}, Confidence: ${avg}%.
+Return ONLY valid JSON no markdown fences:
+{"verdict":"Go in today or Work remote today","headline":"punchy reason max 10 words present tense","reasoning":"2 sentences name specific people and meetings","nudge":"one smart serendipitous observation max 2 sentences","confidence":${avg}}`;
+  let ai;
+  try{
+    const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:500,messages:[{role:"user",content:prompt}]})});
+    const j=await res.json();
+    ai=JSON.parse(j.content[0].text.replace(/```json|```/g,"").trim());
+  }catch(e){
+    ai={verdict:"Go in today",headline:"Three key collaborators are heading in.",reasoning:"Sarah Chen, Lisa Kim, and Aisha Johnson are all predicted in today based on historical patterns. Two in-person meetings anchor the afternoon.",nudge:"Your customer interview wraps at noon — Lisa Kim will be walking out right as you finish. The perfect setup for a working lunch with real-time Cisco Meraki context.",confidence:avg};
+  }
+  clearInterval(iv);
+  document.getElementById("loading").classList.add("hidden");
+  render(ai,hi,lp);
+}
+
+function render(ai,hi,lp){
+  const goIn=ai.verdict.toLowerCase().includes("go in");
+  const orbBg=goIn?"#EAF4EE":"#FEF6E4";
+  const orbStroke=goIn?"#2A6E45":"#B8750A";
+  const orbIcon=goIn
+    ?'<polyline points="20 6 9 17 4 12" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>'
+    :'<circle cx="12" cy="12" r="9" stroke-width="2"/><line x1="12" y1="8" x2="12" y2="12.5" stroke-width="2.5" stroke-linecap="round"/><circle cx="12" cy="16" r="1.2" fill="currentColor" stroke="none"/>';
+
+  const html=`
+  <div class="sec">
+    <div class="lbl">Today's recommendation</div>
+    <div class="rec-row">
+      <div class="rec-orb" style="background:${orbBg}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="${orbStroke}">${orbIcon}</svg>
+      </div>
+      <div class="rec-hl">${ai.verdict} — ${ai.headline}</div>
+    </div>
+    <div class="rec-body">${ai.reasoning}</div>
+    <div class="conf-wrap">
+      <span class="conf-note">Attendance confidence</span>
+      <div class="conf-track"><div class="conf-fill" id="cf" style="width:0%;background:${probColor(ai.confidence)}"></div></div>
+      <span class="conf-pct" style="color:${probColor(ai.confidence)}">${ai.confidence}%</span>
+    </div>
+    <div class="leaveby">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="${orbStroke}" stroke-width="1.8" stroke-linecap="round" style="flex-shrink:0">
+        <circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/>
+      </svg>
+      <div class="leaveby-main">
+        <div class="leaveby-time">Leave by ${D.firstInPerson.leaveBy}</div>
+        <div class="leaveby-label">For your ${D.firstInPerson.time} customer interview</div>
+        <div class="leaveby-why">${D.firstInPerson.commute}</div>
+      </div>
+      <button class="checkin-btn" id="checkin-btn" onclick="attemptCheckIn(this)">Pre check-in</button>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="lbl">Likely in today</div>
+    <div class="col-list">
+      ${hi.map(c=>`
+      <div class="col-row">
+        <div class="av" style="background:${c.color}">${c.init}</div>
+        <div class="col-info">
+          <div class="col-name">${c.name}</div>
+          <div class="col-meta">${c.role} · last seen ${c.last}</div>
+        </div>
+        <div class="col-prob">
+          <div class="col-pct" style="color:${probColor(c.prob)}">${c.prob}%</div>
+          <div class="mini-track"><div class="mini-fill" style="width:${c.prob}%;background:${probColor(c.prob)}"></div></div>
+        </div>
+      </div>`).join("")}
+    </div>
+    <div class="notify-strip">
+      <button class="notify-btn" onclick="notifyColleagues(this)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        Let colleagues know you're heading in
+      </button>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="lbl">Grab lunch with</div>
+    <div class="lunch-grid">
+      ${lp.map(p=>`
+      <div class="lunch-card">
+        <div class="lunch-av" style="background:${p.color}">${p.init}</div>
+        <div class="lunch-name">${p.name.split(" ")[0]}</div>
+        <div class="lunch-why">${p.why}</div>
+      </div>`).join("")}
+    </div>
+    <div class="lunch-actions">
+      <button class="la-btn la-slack" id="slack-lunch-btn" onclick="openSlack()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 11a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.28h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        Message on Slack
+      </button>
+      <button class="la-btn la-cal" id="cal-lunch-btn" onclick="openCal()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="12" y1="14" x2="12" y2="18"/><line x1="10" y1="16" x2="14" y2="16"/></svg>
+        Book lunch meeting
+      </button>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="lbl">Recommended desk</div>
+    <div class="desk-card">
+      <div class="desk-loc">${D.desk.loc}</div>
+      <div class="desk-why">${D.desk.why}</div>
+      <div class="chips">${D.desk.chips.map(c=>`<span class="chip">${c}</span>`).join("")}</div>
+    </div>
+    <div class="desk-cta-row">
+      <button class="desk-btn desk-alt" onclick="this.classList.add('hide')">See other desks</button>
+      <button class="desk-btn desk-book" onclick="bookDesk(this)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Book this desk
+      </button>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="lbl">Convert to in-person</div>
+    <div class="conv-list">
+      ${D.convertable.map(m=>`
+      <div class="conv-row">
+        <div class="conv-info">
+          <div class="conv-title">${m.title}</div>
+          <div class="conv-meta">${m.time} · ${m.who}</div>
+        </div>
+        <button class="conv-btn" onclick="convertMeeting(this)">Book a room</button>
+      </div>`).join("")}
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="lbl">Smart nudge</div>
+    <div class="nudge-card">
+      <div class="nudge-lbl">Envoy AI</div>
+      <div class="nudge-text">&ldquo;${ai.nudge}&rdquo;</div>
+    </div>
+  </div>`;
+
+  const el=document.getElementById("dynamic-content");
+  el.innerHTML=html;
+  el.classList.remove("hidden");
+  setTimeout(()=>{const cf=document.getElementById("cf");if(cf)cf.style.width=ai.confidence+"%";},200);
+
+  document.getElementById("mtg-list").innerHTML=D.meetings.map(m=>`
+    <div class="mtg-row">
+      <div class="mtg-time">${m.time}</div>
+      <div class="mtg-pip" style="background:${m.type==="inperson"?"#2A6E45":"#C8C4BB"}"></div>
+      <div class="mtg-info">
+        <div class="mtg-title">${m.title}<span class="mtg-badge ${m.type==="inperson"?"b-in":"b-re"}">${m.type==="inperson"?"In person":"Remote"}</span></div>
+        <div class="mtg-who">${m.who}</div>
+      </div>
+    </div>`).join("");
+
+  document.getElementById("meetings-section").classList.remove("hidden");
+  document.getElementById("refresh-section").classList.remove("hidden");
+  const rb=document.getElementById("refresh-btn");
+  if(rb)rb.disabled=false;
+}
+
+document.getElementById("hd-date").textContent=fmtDate(new Date()).toUpperCase();
+run();
+</script>
+</body>
+</html>
